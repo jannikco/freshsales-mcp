@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "id": "freshsales-mcp",
+  "kind": "provider-connector",
+  "artifactType": "connector",
+  "qualityVersion": 2,
+  "title": "Freshsales MCP server",
+  "description": "Inspect an existing CRM contact before explicitly adding another contact.",
+  "status": "ready",
+  "verification": "mock-only",
+  "releaseEligible": true,
+  "maintainer": "jannikco",
+  "license": "MIT",
+  "product": "pipmcp",
+  "appSlug": "freshsales",
+  "appName": "Freshsales",
+  "operationIds": [
+    "freshsales_get_contact",
+    "freshsales_create_contact"
+  ],
+  "sourceRevision": "a96f8d5790c5803f509ea9e1fccba33cdd9194d4cf9a2734ee1d6a79ebd82416",
+  "evidence": [
+    "Actual tools/call and direct-provider request contract tests"
+  ],
+  "provenance": [
+    "https://developers.freshworks.com/crm/api/"
+  ],
+  "attributionSlug": "github-freshsales-mcp",
+  "connectorId": "freshsales",
+  "connector": {
+    "id": "freshsales",
+    "name": "Freshsales",
+    "version": "0.1.0",
+    "baseUrl": "https://{FRESHSALES_SUBDOMAIN}.myfreshworks.com/crm/sales/api",
+    "auth": {
+      "type": "header",
+      "env": "FRESHSALES_API_KEY",
+      "header": "Authorization",
+      "prefix": "Token token="
+    },
+    "tools": [
+      {
+        "name": "freshsales_get_contact",
+        "description": "Read one contact by its authorized numeric ID.",
+        "method": "GET",
+        "path": "/contacts/{id}",
+        "readOnly": true,
+        "approvalRequired": false,
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [
+            "id"
+          ],
+          "query": {},
+          "body": {}
+        },
+        "sampleArguments": {
+          "id": 1001
+        },
+        "evidence": {
+          "state": "documented",
+          "providerLiveValidation": "not-run"
+        },
+        "provenance": [
+          "https://developers.freshworks.com/crm/api/"
+        ]
+      },
+      {
+        "name": "freshsales_create_contact",
+        "description": "Create a CRM contact, subject to account-specific required fields.",
+        "method": "POST",
+        "path": "/contacts",
+        "readOnly": false,
+        "approvalRequired": true,
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "first_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "last_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          "required": [
+            "first_name",
+            "last_name",
+            "email"
+          ],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [],
+          "query": {},
+          "body": {
+            "first_name": "contact.first_name",
+            "last_name": "contact.last_name",
+            "email": "contact.email"
+          }
+        },
+        "sampleArguments": {
+          "first_name": "Sandbox",
+          "last_name": "Example",
+          "email": "sandbox@example.com"
+        },
+        "evidence": {
+          "state": "documented",
+          "providerLiveValidation": "not-run"
+        },
+        "provenance": [
+          "https://developers.freshworks.com/crm/api/"
+        ]
+      }
+    ],
+    "workflow": {
+      "name": "Freshsales authorized workflow",
+      "description": "Inspect an existing CRM contact before explicitly adding another contact.",
+      "steps": [
+        "freshsales_get_contact",
+        "freshsales_create_contact"
+      ]
+    },
+    "provenance": [
+      "https://developers.freshworks.com/crm/api/"
+    ],
+    "sourceEvidence": {
+      "state": "documented",
+      "providerLiveValidation": "not-run",
+      "checkedAt": "2026-11-08",
+      "operationCount": 2,
+      "kind": "official-reference",
+      "sha256": "54a2913db55692162452b27e316acb1967372ac2f51d2854b2b6e938964a4180",
+      "sources": [
+        {
+          "url": "https://developers.freshworks.com/crm/api/",
+          "sha256": "54a2913db55692162452b27e316acb1967372ac2f51d2854b2b6e938964a4180",
+          "checkedAt": "2026-11-08T13:11:26.796124+00:00"
+        }
+      ]
+    },
+    "setup": {
+      "requiresPipMcpAccount": false,
+      "credentialsHelpUrl": "https://developers.freshworks.com/crm/api/",
+      "instructions": "Use a Freshsales Suite account on myfreshworks.com and its own API key; FRESHSALES_SUBDOMAIN is only the account label. This connector targets the documented /crm/sales API, not legacy freshsales.io tenants."
+    },
+    "sampleWarning": "Example IDs and email addresses are placeholders. Replace them with records and recipients you are authorized to access. Samples do not authorize writes. HTTP/fixture success does not prove provider execution or email delivery.",
+    "allowedHostSuffixes": [
+      "myfreshworks.com"
+    ],
+    "appSlug": "freshsales",
+    "repoId": "freshsales-mcp",
+    "product": "pipmcp",
+    "artifactType": "connector",
+    "sourceRevision": "a96f8d5790c5803f509ea9e1fccba33cdd9194d4cf9a2734ee1d6a79ebd82416",
+    "capabilityEvidence": {
+      "local": {
+        "level": "Tested",
+        "operations": [
+          {
+            "name": "freshsales_get_contact",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          },
+          {
+            "name": "freshsales_create_contact",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          }
+        ],
+        "evidenceRefs": [
+          "Provider request/stdio contract tests"
+        ],
+        "mode": "local"
+      },
+      "managed": {
+        "level": "Documented",
+        "operations": [
+          {
+            "name": "freshsales_get_contact",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          },
+          {
+            "name": "freshsales_create_contact",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          }
+        ],
+        "evidenceRefs": [],
+        "mode": "managed"
+      }
+    },
+    "managedAvailability": {
+      "status": "import-required",
+      "integration": "openapi-to-mcp",
+      "checkedAt": "2026-11-08T13:20:45.156456+00:00"
+    }
+  },
+  "capabilityEvidence": {
+    "local": {
+      "level": "Tested",
+      "operations": [
+        {
+          "name": "freshsales_get_contact",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        },
+        {
+          "name": "freshsales_create_contact",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        }
+      ],
+      "evidenceRefs": [
+        "Provider request/stdio contract tests"
+      ],
+      "mode": "local"
+    },
+    "managed": {
+      "level": "Documented",
+      "operations": [
+        {
+          "name": "freshsales_get_contact",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        },
+        {
+          "name": "freshsales_create_contact",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        }
+      ],
+      "evidenceRefs": [],
+      "mode": "managed"
+    }
+  },
+  "utility": {
+    "problem": "Inspect an existing CRM contact before explicitly adding another contact.",
+    "output": "Actual provider API results through local MCP tools"
+  },
+  "providerDocs": "https://developers.freshworks.com/crm/api/",
+  "factory": "leadadapter-pipmcp",
+  "generatorVersion": 2
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "product": "pipmcp",
+  "credential": "PIPMCP_API_KEY",
+  "skills": [
+    {
+      "name": "pipmcp-freshsales",
+      "description": "Connect AI agents to Freshsales using one PipMCP API key and actual hosted tool discovery."
+    }
+  ],
+  "files": {
+    "skills/pipmcp-freshsales/SKILL.md": "c79d20857505de906914574ad673fee63486df20e67c44e69dbe452ea3337814"
+  }
+}
